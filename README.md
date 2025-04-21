@@ -24,5 +24,8 @@ This is a project where it basically shortens the url and redirects to the origi
 
 1. Clone the repository
 2. Rename sample.env to .env and change the environment variables accordingly
-3. Run `make run-api` to run the project
+3. Run `make build-img` to build the docker image
+4. Run `make run-api` to run the project
+5. (Optional) _Open `http://localhost:9091` to see the grafana dashboard_
+6. (Optional) _Open `http://localhost:9090` to see the prometheus dashboard_
 
