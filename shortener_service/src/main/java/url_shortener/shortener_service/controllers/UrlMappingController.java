@@ -22,9 +22,6 @@ public class UrlMappingController {
     @Autowired
     private UrlMappingService urlMappingService;
 
-    @Autowired
-    private Environment environment;
-
     @PostMapping("/shorten")
     public ResponseEntity<ShortenUrlResponse> shorten(@RequestBody @Valid UrlMappingRequest urlMappingRequest, HttpServletRequest request) throws NoSuchAlgorithmException {
         UrlMapping urlMapping = urlMappingService.save(urlMappingRequest.getUrl());
