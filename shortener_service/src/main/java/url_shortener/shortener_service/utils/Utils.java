@@ -1,5 +1,7 @@
 package url_shortener.shortener_service.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -28,5 +30,16 @@ public class Utils {
         byte[] hash = digest.digest(urlWithTimestamp.getBytes(StandardCharsets.UTF_8));
 
         return toBase62(hash, 6);
+    }
+
+    public static String getBaseUrl(HttpServletRequest request) {
+        String scheme = request.getScheme();             // http or https
+        String serverName = request.getServerName();     // localhost or domain
+        int serverPort = request.getServerPort();        // 8080, etc.
+
+        boolean isDefaultPort = (scheme.equals("http") && serverPort == 80)
+                || (scheme.equals("https") && serverPort == 443);
+
+        return scheme + "://" + serverName + (isDefaultPort ? "" : ":" + serverPort);
     }
 }
