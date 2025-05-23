@@ -1,0 +1,26 @@
+#eureka.client.service-url.default-zone=http://localhost:8761/eureka/
+##server.error.whitelabel.enabled=false
+##server.error.path=/error
+#
+##server.error.whitelabel.enabled=false
+##server.error.include-stacktrace=always
+#server.error.include-message=always
+spring:
+  application:
+    name: "shortener_service"
+
+  config:
+    import: "optional:configserver:"
+
+  cloud:
+    config:
+      uri: "http://localhost:8888"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: "http://localhost:8761/eureka/"
+
+server:
+  error:
+    include-message: always
