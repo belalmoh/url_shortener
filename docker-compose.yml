@@ -10,41 +10,73 @@ services:
     volumes:
       - mongo_data:/data/db
 
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mongo
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - "8081:8081"
+  #   depends_on:
+  #     - mongo
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  #     ME_CONFIG_MONGODB_SERVER: mongo
+  #     ME_CONFIG_BASICAUTH_USERNAME: admin
+  #     ME_CONFIG_BASICAUTH_PASSWORD: admin123
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+  config_server:
+    build:
+      context: ./config_server
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
     networks:
-      - localprom
+      - url_shortener_network
+
+  discovery_server:
+    build:
+      context: ./discovery_server
+      dockerfile: Dockerfile
     ports:
-      - "${PROMETHEUS_PORT}:9090"
-  grafana:
-    image: grafana/grafana:9.5.2
-    container_name: grafana
+      - "8761:8761"
+    networks:
+      - url_shortener_network
+
+  api_gateway:
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
     ports:
-      - "${GRAFANA_PORT}:3000"
-    restart: unless-stopped
-    volumes:
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - "8080:8080"
+    networks:
+      - url_shortener_network
+    depends_on:
+      - config_server
+      - discovery_server
+
+  shortener_service:
+    build:
+      context: ./url_shortener/shortener_service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - url_shortener_network
+    depends_on:
+      config_server:
+        condition: service_started
+      discovery_server:
+        condition: service_started
+      mongo:
+        condition: service_started
+      
 
 volumes:
   mongo_data:
     driver: local
 
 networks:
-  localprom:
+  url_shortener_network:
     driver: bridge
