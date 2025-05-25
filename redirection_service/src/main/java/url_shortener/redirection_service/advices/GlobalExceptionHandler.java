@@ -1,4 +1,4 @@
-package url_shortener.shortener_service.advices;
+package url_shortener.redirection_service.advices;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

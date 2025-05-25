@@ -1,0 +1,10 @@
+
+
+spring:
+  application:
+    name: redirection_service
+  data:
+    mongodb:
+      uri: mongodb://root:rootpw@localhost:5432/urlshortenerdb?authSource=admin
+server:
+  port: 8082
