@@ -9,3 +9,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:rootpw@localhost:5432/urlshortenerdb?authSource=admin
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
