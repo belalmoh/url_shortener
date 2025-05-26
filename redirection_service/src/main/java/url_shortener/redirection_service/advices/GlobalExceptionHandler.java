@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import url_shortener.shortener_service.dto.ErrorResponse;
+import url_shortener.redirection_service.dto.ErrorResponse;
 
 import java.util.HashMap;
 import java.util.Map;

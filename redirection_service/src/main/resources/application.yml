@@ -1,4 +1,7 @@
-
+server:
+  port: 8082
+  error:
+    include-message: always
 
 spring:
   application:
@@ -6,5 +9,3 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:rootpw@localhost:5432/urlshortenerdb?authSource=admin
-server:
-  port: 8082

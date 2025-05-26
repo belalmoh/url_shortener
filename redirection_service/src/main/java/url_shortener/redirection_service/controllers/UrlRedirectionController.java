@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import url_shortener.common.services.UrlMappingService;
+import url_shortener.redirection_service.services.UrlMappingService;
+
 
 @RestController
 @RequestMapping("/url")

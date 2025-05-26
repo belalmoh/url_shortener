@@ -9,7 +9,8 @@ import url_shortener.shortener_service.entities.UrlMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import url_shortener.shortener_service.services;
+import url_shortener.shortener_service.services.UrlMappingService;
+
 
 import java.security.NoSuchAlgorithmException;
 
