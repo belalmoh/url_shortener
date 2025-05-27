@@ -2,6 +2,7 @@ package url_shortener.shortener_service.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import url_shortener.shortener_service.dto.ShortenUrlResponse;
 import url_shortener.shortener_service.dto.UrlMappingRequest;
@@ -23,11 +24,14 @@ public class UrlMappingController {
     @Autowired
     private UrlMappingService urlMappingService;
 
+    @Value("${api.gateway.public-base-url}")
+    private String apiGatewayPublicBaseUrl;
+
     @PostMapping("/shorten")
     public ResponseEntity<ShortenUrlResponse> shorten(@RequestBody @Valid UrlMappingRequest urlMappingRequest, HttpServletRequest request) throws NoSuchAlgorithmException {
         UrlMapping urlMapping = urlMappingService.save(urlMappingRequest.getUrl());
 
-        String response = getBaseUrl(request) + "/url/" + urlMapping.getUrlAlias();
+        String response = apiGatewayPublicBaseUrl + "/url/" + urlMapping.getUrlAlias();
 
         return ResponseEntity.ok().body(new ShortenUrlResponse(response));
     }

@@ -21,10 +21,12 @@ server:
 
 spring:
   application:
-    name: shortener_service
-  data:
-    mongodb:
-      uri: mongodb://root:rootpw@localhost:5432/urlshortenerdb?authSource=admin
+    name: shortener-service
+  config:
+    import: "optional:configserver:http://localhost:8888"
+  cloud:
+    config:
+      fail-fast: true
 
 eureka:
   client:
