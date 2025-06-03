@@ -13,7 +13,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>discovery_server</name>
     <description>discovery_server</description>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
