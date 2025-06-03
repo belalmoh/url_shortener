@@ -2,7 +2,7 @@ spring:
   application:
     name: api-gateway
   config:
-    import: "configserver:http://localhost:8888"
+    import: "optional:configserver:http://localhost:8888"
   cloud:
     gateway:
       routes:
@@ -15,15 +15,3 @@ spring:
           uri: lb://redirection-service
           predicates:
             - Path=/url/{alias}
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    prefer-ip-address: true
-
-logging:
-  level:
-    org.springframework.cloud.loadbalancer: TRACE
-    org.springframework.cloud.client.discovery: TRACE
-    org.springframework.cloud.gateway: DEBUG # For more gateway general logs

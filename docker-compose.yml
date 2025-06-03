@@ -4,11 +4,13 @@ services:
     image: mongo
     restart: always
     ports:
-      - "${DB_PORT}:27017"
+      - "27017:27017"
     env_file:
       - .env
     volumes:
       - mongo_data:/data/db
+    networks:
+      - url-shortener-network
 
   mongo-express:
     image: mongo-express
@@ -23,11 +25,116 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: admin123
+    networks:
+      - url-shortener-network
+
+  config-server:
+    build:
+      context: .
+      dockerfile: ./config_server/Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/belalmoh/url_shortener_config_repo
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - url-shortener-network
+    volumes:
+      - maven_cache:/root/.m2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  
+  discovery-server:
+    build:
+      context: .
+      dockerfile: ./discovery_server/Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - url-shortener-network
+    volumes:
+      - maven_cache:/root/.m2
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=configserver:http://config-server:8888
+    depends_on:
+      config-server:
+        condition: service_healthy
+
+  shortener-service:
+    build:
+      context: .
+      dockerfile: ./shortener_service/Dockerfile
+    ports:
+      - "8003:8003"
+    networks:
+      - url-shortener-network
+    volumes:
+      - maven_cache:/root/.m2
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=configserver:http://config-server:8888
+    depends_on:
+      config-server:
+        condition: service_started
+      discovery-server:
+        condition: service_started
+
+  redirection-service:
+    build:
+      context: .
+      dockerfile: ./redirection_service/Dockerfile
+    ports:
+      - "8002:8002"
+    networks:
+      - url-shortener-network
+    volumes:
+      - maven_cache:/root/.m2
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=configserver:http://config-server:8888
+    depends_on:
+      config-server:
+        condition: service_started
+      discovery-server:
+        condition: service_started
+      mongo:
+        condition: service_started
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api_gateway/Dockerfile
+    ports:
+      - "9000:9000"
+    networks:
+      - url-shortener-network
+    volumes:
+      - maven_cache:/root/.m2
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_IMPORT=configserver:http://config-server:8888
+    depends_on:
+      config-server:
+        condition: service_started
+      discovery-server:
+        condition: service_started
+      shortener-service:
+        condition: service_started
+      redirection-service:
+        condition: service_started
+      mongo:
+        condition: service_started
 
 volumes:
   mongo_data:
     driver: local
-
+  maven_cache:
+    driver: local
 networks:
-  localprom:
+  url-shortener-network:
     driver: bridge

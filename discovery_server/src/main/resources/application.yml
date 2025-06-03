@@ -1,16 +1,8 @@
 server:
-  port: 8761 # Default port for Eureka server
+  port: 8761
 
 spring:
   application:
-    name: discovery-server # Name of this Eureka server application
-
-eureka:
-  client:
-    register-with-eureka: false # This server should not register itself with another Eureka server
-    fetch-registry: false     # This server should not try to fetch registry information from another Eureka server
-    service-url:
-      defaultZone: http://localhost:8761/eureka/ # For standalone mode, it points to itself (optional but good practice)
-  server:
-    wait-time-in-ms-when-sync-empty: 0 # Optional: Speeds up startup for a single dev instance. Remove for production.
-    # Other server-specific configurations can go here
+    name: discovery-server
+  config:
+    import: "optional:configserver:http://localhost:8888"

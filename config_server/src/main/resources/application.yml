@@ -1,6 +1,11 @@
 server:
   port: 8888
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 spring:
   application:
     name: config-server
@@ -9,3 +14,5 @@ spring:
       server:
         git:
           uri: https://github.com/belalmoh/url_shortener_config_repo
+          search-paths: '{profile}'
+      override-system-properties: false
