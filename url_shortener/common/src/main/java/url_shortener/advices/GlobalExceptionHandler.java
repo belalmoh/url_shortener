@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:redirection_service/src/main/java/url_shortener/redirection_service/advices/GlobalExceptionHandler.java
-package url_shortener.redirection_service.advices;
-========
 package url_shortener.advices;
->>>>>>>> main:url_shortener/common/src/main/java/url_shortener/advices/GlobalExceptionHandler.java
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -11,11 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
-<<<<<<<< HEAD:redirection_service/src/main/java/url_shortener/redirection_service/advices/GlobalExceptionHandler.java
-import url_shortener.redirection_service.dto.ErrorResponse;
-========
 import url_shortener.dto.ErrorResponse;
->>>>>>>> main:url_shortener/common/src/main/java/url_shortener/advices/GlobalExceptionHandler.java
 
 import java.util.HashMap;
 import java.util.Map;

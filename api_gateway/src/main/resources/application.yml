@@ -1,17 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
-    name: api-gateway
-  config:
-    import: "optional:configserver:http://localhost:8888"
-  cloud:
-    gateway:
-      routes:
-        - id: shortener_service_route
-          uri: lb://shortener-service
-          predicates:
-            - Path=/api/shorten
-
-        - id: redirection_service_route
-          uri: lb://redirection-service
-          predicates:
-            - Path=/url/{alias}
+    name: api_gateway
